@@ -1,0 +1,22 @@
+{
+  "name": "epam-node-mentoring",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/volha-charnykh/epam-node-mentoring.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/volha-charnykh/epam-node-mentoring/issues"
+  },
+  "homepage": "https://github.com/volha-charnykh/epam-node-mentoring#readme",
+  "devDependencies": {
+    "nodemon": "2.0.4"
+  }
+}
