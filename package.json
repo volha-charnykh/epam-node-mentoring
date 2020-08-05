@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "task1": "nodemon --exec babel-node src/task1.js",
@@ -13,12 +12,8 @@
     "type": "git",
     "url": "git+https://github.com/volha-charnykh/epam-node-mentoring.git"
   },
-  "author": "",
+  "author": "volha-charnykh",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/volha-charnykh/epam-node-mentoring/issues"
-  },
-  "homepage": "https://github.com/volha-charnykh/epam-node-mentoring#readme",
   "devDependencies": {
     "@babel/core": "^7.10.5",
     "@babel/node": "^7.10.5",
