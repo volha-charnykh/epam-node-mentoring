@@ -1,0 +1,51 @@
+{
+  "defaultSeverity": "error",
+  "extends": [
+    "tslint:recommended"
+  ],
+  "jsRules": {},
+  "rules": {
+    "max-line-length": {
+      "options": [
+        120
+      ]
+    },
+    "no-console": false,
+    "prefer-const": false,
+    "no-any": true,
+    "no-parameter-reassignment": true,
+    "whitespace": [
+      true,
+      "check-branch",
+      "check-decl",
+      "check-operator",
+      "check-separator",
+      "check-type"
+    ],
+    "indent": [
+      true,
+      "spaces",
+      2
+    ],
+    "eofline": true,
+    "semicolon": [
+      true,
+      "always"
+    ],
+    "typedef": [
+      true,
+      "parameter",
+      "call-signature",
+      "member-variable-declaration",
+      "property-declaration",
+      "variable-declaration"
+    ],
+    "curly": true,
+    "no-debugger": true,
+    "no-empty": true,
+    "no-empty-interface": true,
+    "no-var-keyword": true,
+    "no-angle-bracket-type-assertion": true,
+    "no-shadowed-variable": true
+  }
+}
