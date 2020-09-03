@@ -1,44 +1,45 @@
 import { Sequelize } from 'sequelize';
 import config from '../../config';
+import appEventEmitter from '../../events/app-event.emitter';
 
 let sequelize: Sequelize;
 
-if (!config.dbPostgresName ||
-  !config.dbPostgresUser ||
-  !config.dbPostgresPassword) {
+if (!config.dbName || !config.dbUser || !config.dbPassword) {
   console.error('Please provide db config properties');
-  sequelize = new Sequelize();
 } else {
   sequelize = new Sequelize(
-    config.dbPostgresName,
-    config.dbPostgresUser,
-    config.dbPostgresPassword,
+    config.dbName,
+    config.dbUser,
+    config.dbPassword,
     {
-      host: config.dbPostgresHost,
-      port: config.dbPostgresPort ? +config.dbPostgresPort : undefined,
+      host: config.dbHost,
+      port: config.dbPort,
       dialect: 'postgres',
       pool: {
-        max: 5,
-        min: 0,
-        acquire: 30000,
-        idle: 10000
+        max: config.connectionPoolMax,
+        min: config.connectionPoolMin,
+        acquire: config.connectionPoolAcquire,
+        idle: config.connectionPoolIdle
+      },
+      define: {
+        timestamps: false
       }
     });
+
+  sequelize.authenticate()
+    .then(() => {
+      console.log('Connection has been established successfully.');
+    })
+    .catch(error =>
+      console.error('Unable to connect to the database:', error));
+
+  appEventEmitter.on('stop-app', () =>
+    sequelize.close().then(() =>
+        console.log('Connection has been closed successfully.'))
+      .catch(error =>
+        console.error('Unable to close to the connection:', error)));
+
 }
-
-sequelize.authenticate()
-  .then(() =>
-    console.log('Connection has been established successfully.'))
-  .catch(error =>
-    console.error('Unable to connect to the database:', error));
-
-const cleanup = () => sequelize.close() .then(() =>
-    console.log('Connection has been closed successfully.'))
-  .catch(error =>
-    console.error('Unable to close to the connection:', error));
-
-process.on('SIGINT', cleanup);
-process.on('SIGTERM', cleanup);
 
 export default sequelize;
 

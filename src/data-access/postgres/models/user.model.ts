@@ -1,4 +1,3 @@
-import * as bcrypt from 'bcrypt';
 import { BOOLEAN, INTEGER, Model, ModelCtor, STRING, UUID, UUIDV4 } from 'sequelize';
 import { User } from '../../../models';
 import sequelize from '../connector';
@@ -34,25 +33,3 @@ export const UserModel: ModelCtor<UserModelType> = sequelize
     }
   });
 
-const predefinedUsers = Array.from(Array(20).keys()).map(el => ({
-  login: `user${ el }@test.com`,
-  password: 'pass123',
-  age: 30
-}));
-
-UserModel
-  .sync({ force: true })
-  .then(() =>
-    Promise
-      .all(predefinedUsers
-        .map(user =>
-          bcrypt.hash(user.password, 10)
-            .then((hashedPassword) =>
-              UserModel.create({
-                login: user.login,
-                password: hashedPassword,
-                age: user.age
-              }))
-        )
-      )
-  );

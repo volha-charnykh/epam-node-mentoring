@@ -25,6 +25,6 @@ const validateBySchema = (what: 'params' | 'body') => (schema: Schema) =>
     }
   };
 
-export const validateSchema  = validateBySchema('body');
+export const validateBody  = validateBySchema('body');
 
 export const validatePath = validateBySchema('params');

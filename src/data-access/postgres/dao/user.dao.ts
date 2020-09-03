@@ -1,6 +1,7 @@
 import { Op } from 'sequelize';
 import { User } from '../../../models';
 import { UserModel } from '../models';
+import { UserGroupDao } from './user-group.dao';
 
 export const UserDao = {
   async create(user: User): Promise<User | null> {
@@ -41,13 +42,8 @@ export const UserDao = {
       });
   },
 
-  async delete(id: string): Promise<boolean> {
-    return await UserModel.update(
-      {
-        isDeleted: true
-      },
-      { where: { id } })
-      .then(([n, data]: [number, User[]]) => n === 1);
+  async delete(id: string): Promise<any> {
+    return UserGroupDao.deleteUserById(id);
   }
 };
 
