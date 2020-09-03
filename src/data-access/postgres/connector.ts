@@ -32,6 +32,14 @@ sequelize.authenticate()
   .catch(error =>
     console.error('Unable to connect to the database:', error));
 
+const cleanup = () => sequelize.close() .then(() =>
+    console.log('Connection has been closed successfully.'))
+  .catch(error =>
+    console.error('Unable to close to the connection:', error));
+
+process.on('SIGINT', cleanup);
+process.on('SIGTERM', cleanup);
+
 export default sequelize;
 
 
