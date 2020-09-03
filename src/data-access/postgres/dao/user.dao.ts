@@ -1,23 +1,21 @@
-import { Model, Op } from 'sequelize';
-import { UserModel } from '../models';
+import { Op } from 'sequelize';
 import { User } from '../../../models';
+import { UserModel } from '../models';
 
 export const UserDao = {
-  async create(user: User): Promise<User | undefined> {
+  async create(user: User): Promise<User | null> {
     return await UserModel.create({
-        login: user.login,
-        password: user.password,
-        age: user.age
-      })
-      .then((data: Model) => data ? data.get({ plain: true }) : undefined);
+      login: user.login,
+      password: user.password,
+      age: user.age
+    });
   },
 
-  async getById(id: string): Promise<User | undefined> {
-    return await UserModel.findOne({ where: { id, isDeleted: false } })
-      .then((data: Model | null) => data ? data.get({ plain: true }) : undefined);
+  async getById(id: string): Promise<User | null> {
+    return await UserModel.findOne({ where: { id, isDeleted: false } });
   },
 
-  async update(id: string, user: User): Promise<User | undefined> {
+  async update(id: string, user: User): Promise<User | null> {
     return await UserModel.update(
       {
         login: user.login,
@@ -25,11 +23,11 @@ export const UserDao = {
         age: user.age
       },
       { where: { id, isDeleted: false }, returning: true })
-      .then(([n, data]: [number, Model[]]) =>
-        data && data[0] ? data[0].get({ plain: true }) : undefined);
+      .then(([n, data]: [number, User[]]) =>
+        n === 1 ? data[0] : null);
   },
 
-  async getAutoSuggestUsers(loginSubstring: string, limit: number): Promise<User[] | []> {
+  async getAutoSuggestUsers(loginSubstring: string, limit: number): Promise<User[]> {
     return await UserModel.findAll(
       {
         limit,
@@ -40,18 +38,16 @@ export const UserDao = {
           }
         },
         order: ['login']
-      })
-      .then((data: Model[]) => data ? data.map(d => d.get({ plain: true })) : []);
+      });
   },
 
-  async delete(id: string): Promise<boolean | undefined> {
+  async delete(id: string): Promise<boolean> {
     return await UserModel.update(
       {
         isDeleted: true
       },
       { where: { id } })
-      .then(([n, data]: [number, Model[]]) =>
-        data && data[0] ? data[0].get({ plain: true }) : undefined);
+      .then(([n, data]: [number, User[]]) => n === 1);
   }
 };
 
