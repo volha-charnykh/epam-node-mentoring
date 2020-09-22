@@ -2,24 +2,24 @@ import { GroupDao } from '../data-access';
 import { Group } from '../models';
 
 export const GroupService = {
-  async createGroup(group: Group): Promise<Group | null> {
-    return await GroupDao.create(group);
+  createGroup(group: Group): Promise<Group | null> {
+    return GroupDao.create(group);
   },
 
-  async getGroupById(id: string): Promise<Group | null> {
-    return await GroupDao.getById(id);
+  getGroupById(id: string): Promise<Group | null> {
+    return GroupDao.getById(id);
   },
 
-  async updateGroup(id: string, group: Group): Promise<Group | null> {
-    return await GroupDao.update(id, group);
+  updateGroup(id: string, group: Group): Promise<Group | null> {
+    return GroupDao.update(id, group);
   },
 
-  async getAllGroups(): Promise<Group[] | []> {
-    return await GroupDao.getAll();
+  getAllGroups(): Promise<Group[] | []> {
+    return GroupDao.getAll();
   },
 
-  async deleteGroup(id: string): Promise<boolean> {
-    return await GroupDao.delete(id);
+  deleteGroup(id: string): Promise<boolean> {
+    return GroupDao.delete(id);
   },
 };
 

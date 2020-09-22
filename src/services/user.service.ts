@@ -3,8 +3,8 @@ import { UserDao } from '../data-access';
 import { User } from '../models';
 
 export const UserService = {
-  async createUser(user: User): Promise<User | null> {
-    return await bcrypt.hash(user.password, 10)
+  createUser(user: User): Promise<User | null> {
+    return bcrypt.hash(user.password, 10)
       .then((hashedPassword) =>
         UserDao.create({
           login: user.login,
@@ -13,23 +13,23 @@ export const UserService = {
         }));
   },
 
-  async getUserById(id: string): Promise<User | null> {
-    return await UserDao.getById(id);
+  getUserById(id: string): Promise<User | null> {
+    return UserDao.getById(id);
   },
 
-  async updateUser(id: string, user: User): Promise<User | null> {
-    return await UserDao.update(id, user);
+  updateUser(id: string, user: User): Promise<User | null> {
+    return UserDao.update(id, user);
   },
 
   async getAutoSuggestUsers(loginSubstring: string, limit: number): Promise<User[]> {
     if (!loginSubstring || !limit) {
-      return Promise.resolve([]);
+      return [];
     }
-    return await UserDao.getAutoSuggestUsers(loginSubstring, limit);
+    return UserDao.getAutoSuggestUsers(loginSubstring, limit);
   },
 
-  async markUserDeleted(id: string): Promise<boolean> {
-    return await UserDao.delete(id);
+  markUserDeleted(id: string): Promise<boolean> {
+    return UserDao.delete(id);
   }
 };
 

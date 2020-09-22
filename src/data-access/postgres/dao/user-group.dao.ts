@@ -3,8 +3,8 @@ import sequelize from '../connector';
 import { GroupModel, UserModel } from '../models';
 
 export const UserGroupDao = {
-  async getGroupWithUsersById(id: string): Promise<Group | null> {
-    return await GroupModel.findByPk(id, {
+  getGroupWithUsersById(id: string): Promise<Group | null> {
+    return GroupModel.findByPk(id, {
       include: [{
         model: UserModel,
         as: 'users',
@@ -17,8 +17,8 @@ export const UserGroupDao = {
     });
   },
 
-  async getUserWithGroupsById(id: string): Promise<User | null> {
-    return await UserModel.findOne({
+  getUserWithGroupsById(id: string): Promise<User | null> {
+    return UserModel.findOne({
       where: { id, isDeleted: false },
       include: [{
         model: GroupModel,

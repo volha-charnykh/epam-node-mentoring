@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 
-type AppEvents = 'stop-app';
+type AppEvents = 'stop-app' | 'app-inited';
 
 class AppEventEmitter extends EventEmitter {
   emit(event: AppEvents, ...args: any[]): boolean {

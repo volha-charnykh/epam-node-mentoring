@@ -4,20 +4,20 @@ import { UserModel } from '../models';
 import { UserGroupDao } from './user-group.dao';
 
 export const UserDao = {
-  async create(user: User): Promise<User | null> {
-    return await UserModel.create({
+  create(user: User): Promise<User | null> {
+    return UserModel.create({
       login: user.login,
       password: user.password,
       age: user.age
     });
   },
 
-  async getById(id: string): Promise<User | null> {
-    return await UserModel.findOne({ where: { id, isDeleted: false } });
+  getById(id: string): Promise<User | null> {
+    return UserModel.findOne({ where: { id, isDeleted: false } });
   },
 
-  async update(id: string, user: User): Promise<User | null> {
-    return await UserModel.update(
+  update(id: string, user: User): Promise<User | null> {
+    return UserModel.update(
       {
         login: user.login,
         password: user.password,
@@ -28,8 +28,8 @@ export const UserDao = {
         n === 1 ? data[0] : null);
   },
 
-  async getAutoSuggestUsers(loginSubstring: string, limit: number): Promise<User[]> {
-    return await UserModel.findAll(
+  getAutoSuggestUsers(loginSubstring: string, limit: number): Promise<User[]> {
+    return UserModel.findAll(
       {
         limit,
         where: {
@@ -42,7 +42,7 @@ export const UserDao = {
       });
   },
 
-  async delete(id: string): Promise<any> {
+  delete(id: string): Promise<any> {
     return UserGroupDao.deleteUserById(id);
   }
 };
