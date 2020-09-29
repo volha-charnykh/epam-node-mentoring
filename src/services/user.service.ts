@@ -1,8 +1,9 @@
 import * as bcrypt from 'bcrypt';
 import { UserDao } from '../data-access';
+import { logObjectMethods } from '../logger/wrappers/log-object-methods';
 import { User } from '../models';
 
-export const UserService = {
+export const UserService = logObjectMethods('user-service', {
   createUser(user: User): Promise<User | null> {
     return bcrypt.hash(user.password, 10)
       .then((hashedPassword) =>
@@ -31,5 +32,5 @@ export const UserService = {
   markUserDeleted(id: string): Promise<boolean> {
     return UserDao.delete(id);
   }
-};
+});
 

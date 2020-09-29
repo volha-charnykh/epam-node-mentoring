@@ -1,31 +1,67 @@
 import { Request, Response } from 'express';
+import { logger } from '../logger';
+import { functionLogFormatter } from '../logger/formatter';
 import { UserService } from '../services';
 
 export const UserRoutes = {
-  create: async (req: Request, res: Response) => {
-    const user = await UserService.createUser(req.body)
-      .catch(error => res.status(400).json({error}));
-    !!user ? res.json(user) : res.status(400).json({error: 'User can\'t be added'});
+  create: (req: Request, res: Response) => {
+    return UserService.createUser(req.body)
+      .then(user =>
+        !!user ?
+          res.status(201).json(user) :
+          res.status(400).json({ error: 'User can\'t be added' })
+      ).catch(error => {
+        logger.error(functionLogFormatter('user-controller', 'create',
+          [req.body], error));
+        res.status(400).json({ error: error.message });
+      });
   },
-  update: async (req: Request, res: Response) => {
-    const user = await UserService.updateUser(req.params.id, req.body)
-      .catch(error => res.status(400).json({error}));
-    !!user ? res.json(user) : res.status(400).json({error: 'User not found'});
+
+  update: (req: Request, res: Response) => {
+    return UserService.updateUser(req.params.id, req.body)
+      .then(user =>
+        !!user ?
+          res.json(user) :
+          res.status(404).json({ error: 'User not found' }))
+      .catch(error => {
+        logger.error(functionLogFormatter('user-controller', 'update', [req.params.id, req.body], error));
+        res.status(400).json({ error: error.message });
+      });
   },
-  getById: async (req: Request, res: Response) => {
-    const user = await UserService.getUserById(req.params.id)
-      .catch(error => res.status(400).json({error}));
-    !!user ? res.json(user) : res.status(400).json({error: 'User not found'});
+
+  getById: (req: Request, res: Response) => {
+    return UserService.getUserById(req.params.id)
+      .then(user =>
+        !!user ?
+          res.json(user) :
+          res.status(404).json({ error: 'User not found' }))
+      .catch(error => {
+        logger.error(functionLogFormatter('user-controller', 'getById', [req.params.id], error));
+        res.status(400).json({ error: error.message });
+      });
   },
-  getAutoSuggestUsers: async (req: Request, res: Response) => {
+
+  getAutoSuggestUsers: (req: Request, res: Response) => {
     let { loginSubstring, limit } = req.query;
-    const users = await UserService.getAutoSuggestUsers(loginSubstring as string, Number(limit))
-      .catch(error => res.status(400).json({error}));
-    res.json(users || []);
+    return UserService.getAutoSuggestUsers(loginSubstring as string, Number(limit))
+      .then(users => res.json(users || []))
+      .catch(error => {
+        logger.error(functionLogFormatter('user-controller', 'getAutoSuggestUsers',
+          [loginSubstring as string, Number(limit)], error));
+        res.status(400).json({ error: error.message });
+      });
   },
-  delete: async (req: Request, res: Response) => {
-    const deleted = await UserService.markUserDeleted(req.params.id)
-      .catch(error => res.status(400).json({error}));
-    deleted ? res.json('User deleted') : res.status(400).json({error: 'User not found'});
+
+  delete: (req: Request, res: Response) => {
+    return UserService.markUserDeleted(req.params.id)
+      .then(deleted =>
+        deleted ?
+          res.json('User deleted') :
+          res.status(404).json({ error: 'User not found' })
+      )
+      .catch(error => {
+        logger.error(functionLogFormatter('user-controller', 'delete', [req.params.id], error));
+        res.status(400).json({ error: error.message });
+      });
   }
 };

@@ -1,20 +1,42 @@
 import { Request, Response } from 'express';
+import { logger } from '../logger';
+import { functionLogFormatter } from '../logger/formatter';
 import { UserGroupService } from '../services';
 
 export const UserGroupRoutes = {
-  getGroupWithUsersById: async (req: Request, res: Response) => {
-    const group = await UserGroupService.getGroupWithUsersById(req.params.id)
-      .catch(error => res.status(400).json({ error }));
-    !!group ? res.json(group) : res.status(400).json({ error: 'Group not found' });
+  getGroupWithUsersById: (req: Request, res: Response) => {
+    return UserGroupService.getGroupWithUsersById(req.params.id)
+      .then(group =>
+        !!group ? res.json(group) : res.status(404).json({ error: 'Group not found' })
+      )
+      .catch(error => {
+        logger.error(functionLogFormatter('user-group-controller', 'getGroupWithUsersById',
+          [req.params.id], error));
+        res.status(400).json({ error: error.message });
+      });
   },
-  getUserWithGroupsById: async (req: Request, res: Response) => {
-    const user = await UserGroupService.getUserWithGroupsById(req.params.id)
-      .catch(error => res.status(400).json({ error }));
-    !!user ? res.json(user) : res.status(400).json({ error: 'User not found' });
+
+  getUserWithGroupsById: (req: Request, res: Response) => {
+    return UserGroupService.getUserWithGroupsById(req.params.id)
+      .then(user =>
+        !!user ? res.json(user) : res.status(404).json({ error: 'User not found' })
+      )
+      .catch(error => {
+        logger.error(functionLogFormatter('user-group-controller', 'getUserWithGroupsById',
+          [req.params.id], error));
+        res.status(400).json({ error: error.message });
+      });
   },
-  addUsersToGroup: async (req: Request, res: Response) => {
-    const group = await UserGroupService.addUsersToGroup(req.params.id, req.body)
-      .catch(error => res.status(400).json({ error }));
-    !!group ? res.json(group) : res.status(400).json({ error: 'Group not found' });
+
+  addUsersToGroup: (req: Request, res: Response) => {
+    return UserGroupService.addUsersToGroup(req.params.id, req.body)
+      .then(group =>
+        !!group ? res.json(group) : res.status(404).json({ error: 'Group not found' })
+      )
+      .catch(error => {
+        logger.error(functionLogFormatter('user-group-controller', 'addUsersToGroup',
+          [req.params.id, req.body], error));
+        res.status(400).json({ error: error.message });
+      });
   },
 };

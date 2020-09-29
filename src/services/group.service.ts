@@ -1,7 +1,8 @@
 import { GroupDao } from '../data-access';
+import { logObjectMethods } from '../logger/wrappers/log-object-methods';
 import { Group } from '../models';
 
-export const GroupService = {
+export const GroupService = logObjectMethods('group-service', {
   createGroup(group: Group): Promise<Group | null> {
     return GroupDao.create(group);
   },
@@ -21,5 +22,5 @@ export const GroupService = {
   deleteGroup(id: string): Promise<boolean> {
     return GroupDao.delete(id);
   },
-};
+});
 

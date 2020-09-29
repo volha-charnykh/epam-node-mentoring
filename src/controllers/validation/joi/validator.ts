@@ -1,5 +1,6 @@
 import { Schema, ValidationErrorItem } from '@hapi/joi';
 import { Request, Response } from 'express';
+import { logger } from '../../../logger';
 
 const errorResponse = (schemaErrors: ValidationErrorItem[]) => {
   const errors = schemaErrors.map(error => {
@@ -17,8 +18,8 @@ const validateBySchema = (what: 'params' | 'body') => (schema: Schema) =>
       abortEarly: false,
       allowUnknown: false
     });
-    console.log(error);
     if (error && error.isJoi) {
+      logger.error(`joi: ${what} error: ${error}`);
       res.status(400).json(errorResponse(error.details));
     } else {
       next();

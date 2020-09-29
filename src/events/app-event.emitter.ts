@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 
-type AppEvents = 'stop-app' | 'app-inited';
+type AppEvents = 'stop-app' | 'app-inited' | 'app-stopped';
 
 class AppEventEmitter extends EventEmitter {
   emit(event: AppEvents, ...args: any[]): boolean {
@@ -13,8 +13,5 @@ class AppEventEmitter extends EventEmitter {
 }
 
 const appEventEmitter = new AppEventEmitter();
-
-process.on('SIGINT', () => appEventEmitter.emit('stop-app'));
-process.on('SIGTERM', () =>  appEventEmitter.emit('stop-app'));
 
 export default appEventEmitter;

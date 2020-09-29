@@ -1,7 +1,8 @@
 import { UserGroupDao } from '../data-access';
+import { logObjectMethods } from '../logger/wrappers/log-object-methods';
 import { Group, User } from '../models';
 
-export const UserGroupService = {
+export const UserGroupService = logObjectMethods('user-group-service', {
   getGroupWithUsersById(id: string): Promise<Group | null> {
     return UserGroupDao.getGroupWithUsersById(id);
   },
@@ -11,5 +12,5 @@ export const UserGroupService = {
   addUsersToGroup(groupId: string, userIds: string[]): Promise<Group | null> {
     return UserGroupDao.addUsersToGroup(groupId, userIds);
   },
-};
+});
 

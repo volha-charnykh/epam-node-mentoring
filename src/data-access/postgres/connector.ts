@@ -1,11 +1,12 @@
 import { Sequelize } from 'sequelize';
 import config from '../../config';
 import appEventEmitter from '../../events/app-event.emitter';
+import { logger } from '../../logger';
 
 let sequelize: Sequelize;
 
 if (!config.dbName || !config.dbUser || !config.dbPassword) {
-  console.error('Please provide db config properties');
+  logger.error('sequelize: Please provide db config properties');
 } else {
   sequelize = new Sequelize(
     config.dbName,
@@ -28,17 +29,19 @@ if (!config.dbName || !config.dbUser || !config.dbPassword) {
 
   sequelize.authenticate()
     .then(() => {
-      console.log('sequelize: Connection has been established successfully.');
+      logger.info('sequelize: Connection has been established successfully.');
       appEventEmitter.emit('app-inited');
     })
     .catch(error =>
-      console.error('Unable to connect to the database:', error));
+      logger.error(`sequelize: Unable to connect to the database: ${error}`));
 
   appEventEmitter.on('stop-app', () =>
-    sequelize.close().then(() =>
-        console.log('Connection has been closed successfully.'))
+    sequelize.close().then(() => {
+        logger.info('sequelize: Connection has been closed successfully.');
+        appEventEmitter.emit('app-stopped');
+      })
       .catch(error =>
-        console.error('Unable to close to the connection:', error)));
+        logger.error(`sequelize: Unable to close to the connection: ${error}`)));
 
 }
 
