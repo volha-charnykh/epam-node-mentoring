@@ -29,26 +29,25 @@ appEventEmitter.on('app-inited', () => {
   server = app.listen(PORT, () => logger.info(`express: Server is listening ${ PORT } port.`));
 });
 
-appEventEmitter.on('app-stopped', () => {
+const closeServer = () =>  {
   if (!!server) {
     server.close(() => {
       logger.info(`express: Server was closed successfully.`);
-      process.exit(1);
     });
-  }
-});
+    appEventEmitter.emit('stop-app');
+  }};
 
-process.on('SIGINT',
-  () => appEventEmitter.emit('stop-app'))
-  .on('SIGTERM',
-    () => appEventEmitter.emit('stop-app'))
+appEventEmitter.on('app-stopped', () => process.exit(1));
+
+process.on('SIGINT', closeServer)
+  .on('SIGTERM', closeServer)
   .on('uncaughtException',
     error => {
       logger.error(`Uncaught Exception thrown: ${ error }`);
-      appEventEmitter.emit('stop-app');
+      closeServer();
     })
   .on('unhandledRejection',
     error => {
       logger.error(`Unhandled Rejection at Promise: ${ error } `);
-      appEventEmitter.emit('stop-app');
+      closeServer();
     });

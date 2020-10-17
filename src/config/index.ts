@@ -11,5 +11,6 @@ export default {
   connectionPoolMax: +process.env.DB_POOL_MAX,
   connectionPoolMin: +process.env.DB_POOL_MIN,
   connectionPoolAcquire: +process.env.DB_POOL_ACQUIRE,
-  connectionPoolIdle: +process.env.DB_POOL_IDLE
+  connectionPoolIdle: +process.env.DB_POOL_IDLE,
+  jwtTokenSecret: process.env.JWT_SECRET
 };

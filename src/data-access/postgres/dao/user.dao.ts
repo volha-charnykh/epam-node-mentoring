@@ -44,6 +44,10 @@ export const UserDao = {
 
   delete(id: string): Promise<any> {
     return UserGroupDao.deleteUserById(id);
+  },
+
+  findByLogin(login: string): Promise<User | null> {
+    return UserModel.findOne({ where: { login, isDeleted: false } });
   }
 };
 
