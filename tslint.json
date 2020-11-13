@@ -41,7 +41,7 @@
     ],
     "curly": true,
     "no-debugger": true,
-    "no-empty": true,
+    "no-empty": false,
     "no-empty-interface": true,
     "no-var-keyword": true,
     "no-angle-bracket-type-assertion": true,
