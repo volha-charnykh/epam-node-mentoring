@@ -10,6 +10,10 @@ jest.mock('../services', () => ({
   }
 }));
 
+jest.mock('../logger', () => ({
+  logger: { error: () => {} },
+}));
+
 import { GroupService } from '../services';
 
 describe('GroupRoutes', () => {
